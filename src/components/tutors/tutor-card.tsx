@@ -52,7 +52,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
                             ${tutor.hourlyRate}
                             <span className="text-sm font-normal text-gray-500">/hr</span>
                         </div>
-                        <Link href={`/tutors/${tutor.userId}`}>
+                        <Link href={`/tutors/${tutor.id}`}>
                             <Button>View Profile</Button>
                         </Link>
                     </div>
