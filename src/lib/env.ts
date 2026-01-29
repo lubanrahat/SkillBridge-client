@@ -6,10 +6,7 @@ export const env = createEnv({
     BACKEND_URL: z.url(),
   },
 
-
-  client: {
-    
-  },
+  client: {},
 
   runtimeEnv: {
     BACKEND_URL: process.env.BACKEND_URL,
