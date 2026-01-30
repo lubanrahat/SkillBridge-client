@@ -231,7 +231,7 @@ export function BookingForm({
         <CardFooter>
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-600 to-violet-600"
+            className="w-full bg-gradient-to-r from-blue-600 to-violet-600 mt-5 cursor-pointer"
             disabled={isLoading || !selectedDate || !startTime || !endTime}
           >
             {isLoading ? (

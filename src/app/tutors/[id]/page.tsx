@@ -25,20 +25,36 @@ async function getTutor(id: string) {
   }
 }
 
-async function getTutorReviews(id: string) {
+async function getTutorReviews(profileId: string, userId: string) {
   try {
     const API_URL = env.BACKEND_URL || "http://localhost:8080/api/v1";
-    const response = await fetch(`${API_URL}/reviews/tutor/${id}`, {
-      cache: "no-store",
-    });
 
-    if (!response.ok) {
+    // Helper to fetch and parse reviews
+    const fetchReviews = async (id: string) => {
+      const response = await fetch(`${API_URL}/reviews/tutor/${id}`, {
+        cache: "no-store",
+      });
+
+      if (!response.ok) return null;
+
+      const data = await response.json();
+      console.log(`Reviews fetch for ${id}:`, data);
+
+      const payload = data.data;
+      if (Array.isArray(payload)) return payload as Review[];
+      if (payload?.reviews && Array.isArray(payload.reviews)) return payload.reviews as Review[];
       return [];
-    }
+    };
 
-    const data = await response.json();
-    console.log(data);
-    return (data.data?.reviews || []) as Review[];
+    // Try Profile ID first (most likely for "reviews/tutor/:id")
+    const reviewsByProfile = await fetchReviews(profileId);
+    if (reviewsByProfile && reviewsByProfile.length > 0) return reviewsByProfile;
+
+    // Fallback to User ID if Profile ID returned nothing/error
+    console.log("Fallback to User ID for reviews fetch");
+    const reviewsByUser = await fetchReviews(userId);
+    return reviewsByUser || [];
+
   } catch (error) {
     console.error("Error fetching reviews:", error);
     return [];
@@ -57,7 +73,7 @@ export default async function TutorProfilePage({
     notFound();
   }
 
-  const reviews = await getTutorReviews(tutor.userId);
+  const reviews = await getTutorReviews(tutor.id, tutor.userId);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -195,8 +211,8 @@ export default async function TutorProfilePage({
                                     <Star
                                       key={i}
                                       className={`h-4 w-4 ${i < review.rating
-                                          ? "fill-yellow-400 text-yellow-400"
-                                          : "text-gray-300"
+                                        ? "fill-yellow-400 text-yellow-400"
+                                        : "text-gray-300"
                                         }`}
                                     />
                                   ))}
