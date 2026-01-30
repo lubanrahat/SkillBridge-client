@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star, Mail, DollarSign, BookOpen } from "lucide-react";
+import { Star, Mail, DollarSign, BookOpen, Clock } from "lucide-react";
 import type { Review, TutorProfile } from "@/types/api";
 import { Header } from "@/components/layout/navbar";
 import { BookingForm } from "@/components/tutors/booking-form";
@@ -30,7 +30,6 @@ async function getTutorReviews(profileId: string, userId: string) {
   try {
     const API_URL = env.BACKEND_URL || "http://localhost:8080/api/v1";
 
-    // Helper to fetch and parse reviews
     const fetchReviews = async (id: string) => {
       const response = await fetch(`${API_URL}/reviews/tutor/${id}`, {
         cache: "no-store",
@@ -43,19 +42,16 @@ async function getTutorReviews(profileId: string, userId: string) {
 
       const payload = data.data;
       if (Array.isArray(payload)) return payload as Review[];
-      if (payload?.reviews && Array.isArray(payload.reviews)) return payload.reviews as Review[];
+      if (payload?.reviews && Array.isArray(payload.reviews))
+        return payload.reviews as Review[];
       return [];
     };
 
-    // Try Profile ID first (most likely for "reviews/tutor/:id")
     const reviewsByProfile = await fetchReviews(profileId);
-    if (reviewsByProfile && reviewsByProfile.length > 0) return reviewsByProfile;
-
-    // Fallback to User ID if Profile ID returned nothing/error
-    console.log("Fallback to User ID for reviews fetch");
+    if (reviewsByProfile && reviewsByProfile.length > 0)
+      return reviewsByProfile;
     const reviewsByUser = await fetchReviews(userId);
     return reviewsByUser || [];
-
   } catch (error) {
     console.error("Error fetching reviews:", error);
     return [];
@@ -131,6 +127,71 @@ export default async function TutorProfilePage({
                   <p className="text-gray-600 leading-relaxed">
                     {tutor.bio || "This tutor hasn't added a bio yet."}
                   </p>
+                </CardContent>
+              </Card>
+
+              {/* Availability Section */}
+              <Card>
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Clock className="h-6 w-6 text-blue-600" />
+                    <h2 className="text-2xl font-bold">Availability</h2>
+                  </div>
+                  {!tutor.availability ||
+                  Object.keys(tutor.availability).length === 0 ? (
+                    <p className="text-gray-500 text-center py-8">
+                      No availability set yet
+                    </p>
+                  ) : (
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {[
+                        "monday",
+                        "tuesday",
+                        "wednesday",
+                        "thursday",
+                        "friday",
+                        "saturday",
+                        "sunday",
+                      ].map((day) => {
+                        const slots = tutor.availability?.[day] || [];
+                        const hasSlots = slots.length > 0;
+
+                        return (
+                          <div
+                            key={day}
+                            className={`p-4 rounded-lg border-2 ${
+                              hasSlots
+                                ? "border-blue-200 bg-blue-50"
+                                : "border-gray-200 bg-gray-50"
+                            }`}
+                          >
+                            <h3 className="font-semibold text-sm uppercase tracking-wide mb-2 text-gray-700">
+                              {day.charAt(0).toUpperCase() + day.slice(1)}
+                            </h3>
+                            {hasSlots ? (
+                              <div className="space-y-1">
+                                {slots.map((slot, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-2 text-sm"
+                                  >
+                                    <Clock className="h-3.5 w-3.5 text-blue-600" />
+                                    <span className="text-gray-700 font-medium">
+                                      {slot}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-gray-400 text-sm italic">
+                                Not available
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -211,10 +272,11 @@ export default async function TutorProfilePage({
                                   {[...Array(5)].map((_, i) => (
                                     <Star
                                       key={i}
-                                      className={`h-4 w-4 ${i < review.rating
-                                        ? "fill-yellow-400 text-yellow-400"
-                                        : "text-gray-300"
-                                        }`}
+                                      className={`h-4 w-4 ${
+                                        i < review.rating
+                                          ? "fill-yellow-400 text-yellow-400"
+                                          : "text-gray-300"
+                                      }`}
                                     />
                                   ))}
                                 </div>
@@ -252,7 +314,7 @@ export default async function TutorProfilePage({
           </div>
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

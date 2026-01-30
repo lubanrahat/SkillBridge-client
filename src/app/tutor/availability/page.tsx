@@ -27,6 +27,54 @@ const DAYS = [
   "sunday",
 ] as const;
 
+
+function validateTimeFormat(slot: string): boolean {
+  
+  const timeRangeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]-([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+  return timeRangeRegex.test(slot);
+}
+
+function validateTimeRange(slot: string): boolean {
+  const [start, end] = slot.split("-");
+  if (!start || !end) return false;
+
+  const [startHour, startMin] = start.split(":").map(Number);
+  const [endHour, endMin] = end.split(":").map(Number);
+
+  const startMinutes = startHour * 60 + startMin;
+  const endMinutes = endHour * 60 + endMin;
+
+  return endMinutes > startMinutes;
+}
+
+function checkOverlap(existingSlots: string[], newSlot: string): boolean {
+  const [newStart, newEnd] = newSlot.split("-");
+  if (!newStart || !newEnd) return false;
+
+  const parseTime = (time: string) => {
+    const [hour, min] = time.split(":").map(Number);
+    return hour * 60 + min;
+  };
+
+  const newStartMin = parseTime(newStart);
+  const newEndMin = parseTime(newEnd);
+
+  return existingSlots.some((slot) => {
+    const [existStart, existEnd] = slot.split("-");
+    if (!existStart || !existEnd) return false;
+
+    const existStartMin = parseTime(existStart);
+    const existEndMin = parseTime(existEnd);
+
+
+    return (
+      (newStartMin >= existStartMin && newStartMin < existEndMin) ||
+      (newEndMin > existStartMin && newEndMin <= existEndMin) ||
+      (newStartMin <= existStartMin && newEndMin >= existEndMin)
+    );
+  });
+}
+
 export default function TutorAvailabilityPage() {
   const [availability, setAvailability] = useState<AvailabilityMap>({});
   const [loading, setLoading] = useState(true);
@@ -61,15 +109,34 @@ export default function TutorAvailabilityPage() {
 
   const handleAddSlot = (day: string) => {
     const value = (newSlot[day] || "").trim();
+
     if (!value) {
-      toast.error("Enter a time range like 09:00-12:00");
+      toast.error("Please enter a time range (e.g., 09:00-12:00)");
       return;
     }
+
+    if (!validateTimeFormat(value)) {
+      toast.error("Invalid format. Use HH:MM-HH:MM (e.g., 09:00-12:00)");
+      return;
+    }
+
+    if (!validateTimeRange(value)) {
+      toast.error("End time must be after start time");
+      return;
+    }
+
+    const existingSlots = availability[day] || [];
+    if (checkOverlap(existingSlots, value)) {
+      toast.error("This time slot overlaps with an existing slot");
+      return;
+    }
+
     setAvailability((prev) => ({
       ...prev,
       [day]: [...(prev[day] || []), value],
     }));
     setNewSlot((prev) => ({ ...prev, [day]: "" }));
+    toast.success("Time slot added successfully");
   };
 
   const handleRemoveSlot = (day: string, index: number) => {

@@ -122,10 +122,10 @@ export function Sidebar({ role }: SidebarProps) {
           })}
         </nav>
 
-        <div className="p-4 border-t">
+        <div className="p-4 border-t mt-auto">
           <Button
             variant="ghost"
-            className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50"
+            className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50 cursor-pointer"
             onClick={handleLogout}
           >
             <LogOut className="h-5 w-5 mr-3" />

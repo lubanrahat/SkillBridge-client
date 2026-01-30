@@ -1,3 +1,6 @@
+// Availability types
+export type AvailabilityMap = Record<string, string[]>;
+
 // Auth types
 export interface LoginRequest {
   email: string;
@@ -40,7 +43,7 @@ export interface TutorProfile {
   bio?: string | null;
   subjects: string[];
   hourlyRate: number;
-  availability?: unknown;
+  availability?: AvailabilityMap;
   averageRating: number;
   totalReviews: number;
   categories: Category[];
@@ -53,11 +56,11 @@ export interface CreateTutorProfileRequest {
   subjects: string[];
   hourlyRate: number;
   categoryIds?: string[];
-  availability?: unknown;
+  availability?: AvailabilityMap;
 }
 
 export interface UpdateAvailabilityRequest {
-  availability: unknown;
+  availability: AvailabilityMap;
 }
 
 // Category types

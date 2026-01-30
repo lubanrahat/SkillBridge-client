@@ -76,14 +76,14 @@ export function Header() {
     link: "/dashboard",
   };
 
-  if(user) {
-    switch(user.role) {
+  if (user) {
+    switch (user.role) {
       case "STUDENT":
         dropdownMenuItem.link = "/dashboard";
         break;
       case "TUTOR":
         dropdownMenuItem.link = "/tutor/dashboard";
-        
+
         break;
       case "ADMIN":
         dropdownMenuItem.link = "/admin";
@@ -105,7 +105,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             {user ? (
               <>
-                <div className="flex items-center gap-4"  >
+                <div className="flex items-center gap-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
@@ -114,17 +114,30 @@ export function Header() {
                         className="rounded-full cursor-pointer"
                       >
                         <Avatar>
-                          <AvatarFallback className="font-bold text-primary">{user.name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className="font-bold text-primary">
+                            {user.name.charAt(0)}
+                          </AvatarFallback>
                         </Avatar>
-                      </Button> 
+                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-32">
                       <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={() => window.location.href = dropdownMenuItem.link} className="cursor-pointer">{dropdownMenuItem.name}</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = dropdownMenuItem.link)
+                          }
+                          className="cursor-pointer"
+                        >
+                          {dropdownMenuItem.name}
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={handleLogout} variant="destructive" className="cursor-pointer">
+                        <DropdownMenuItem
+                          onClick={handleLogout}
+                          variant="destructive"
+                          className="cursor-pointer"
+                        >
                           Log out
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
@@ -179,63 +192,83 @@ export function Header() {
             className="flex flex-col space-x-0 space-y-4 relative w-full items-start"
           />
           <div className="flex items-center space-x-2">
-          <div className="flex items-center gap-2">
-            {user ? (
-              <>
-                <div className="flex items-center flex-col gap-4"  >
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="rounded-full cursor-pointer"
-                      >
-                        <Avatar>
-                          <AvatarFallback className="font-bold text-primary">{user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                      </Button> 
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-32">
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={() => window.location.href = dropdownMenuItem.link} className="cursor-pointer">{dropdownMenuItem.name}</DropdownMenuItem>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={handleLogout} variant="destructive" className="cursor-pointer">
-                          Log out
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+            <div className="flex items-center gap-2">
+              {user ? (
+                <>
+                  <div className="flex items-center flex-col gap-4">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="rounded-full cursor-pointer"
+                        >
+                          <Avatar>
+                            <AvatarFallback className="font-bold text-primary">
+                              <span className="text-white font-bold text-xl">
+                                {user?.name
+                                  ?.trim()
+                                  .split(/\s+/)
+                                  .slice(0, 2)
+                                  .map((w) => w[0].toUpperCase())
+                                  .join("")}
+                              </span>
+                            </AvatarFallback> 
+                          </Avatar>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-32">
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              (window.location.href = dropdownMenuItem.link)
+                            }
+                            className="cursor-pointer"
+                          >
+                            {dropdownMenuItem.name}
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem
+                            onClick={handleLogout}
+                            variant="destructive"
+                            className="cursor-pointer"
+                          >
+                            Log out
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
-                  <NavbarButton
-                    className="dark:bg-primary dark:text-white"
-                    href="/contact"
-                  >
-                    Get Started
-                  </NavbarButton>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex gap-3 flex-col">
-                  <NavbarButton
-                    className="dark:bg-primary dark:text-white"
-                    href="/login"
-                  >
-                    Login
-                  </NavbarButton>
-                  <NavbarButton
-                    className="dark:bg-primary dark:text-white"
-                    href="/register"
-                  >
-                    Sign Up
-                  </NavbarButton>
-                </div>
-              </>
-            )}
+                    <NavbarButton
+                      className="dark:bg-primary dark:text-white"
+                      href="/contact"
+                    >
+                      Get Started
+                    </NavbarButton>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-3 flex-col">
+                    <NavbarButton
+                      className="dark:bg-primary dark:text-white"
+                      href="/login"
+                    >
+                      Login
+                    </NavbarButton>
+                    <NavbarButton
+                      className="dark:bg-primary dark:text-white"
+                      href="/register"
+                    >
+                      Sign Up
+                    </NavbarButton>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
         </MobileNavMenu>
       </MobileNav>
     </Navbar>
