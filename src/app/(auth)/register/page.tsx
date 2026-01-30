@@ -56,14 +56,8 @@ export default function RegisterPage() {
     setIsLoading(true);
     try {
       const response = await authService.register(data);
-      toast.success("Account created successfully!");
-
-      const user = response.user;
-      if (user.role === "TUTOR") {
-        router.push("/tutor/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
+      toast.success("Account created successfully! Please log in.");
+      router.push("/login");
     } catch (error: unknown) {
       const message =
         error instanceof Error
