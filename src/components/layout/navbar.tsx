@@ -19,6 +19,7 @@ export function Header() {
 
   const navItems = [
     { name: "Home", link: "/" },
+    { name: "Find Tutors", link: "/tutors" }
   ];
 
   return (

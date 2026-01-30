@@ -9,7 +9,10 @@ export function proxy(request: NextRequest) {
   const isPublicPath =
     path === "/" ||
     path === "/login" ||
-    path === "/register";
+    path === "/register" ||
+    path.startsWith("/tutors") ||
+    path === "/about" ||
+    path === "/categories";
 
   // Redirect to login if accessing protected route without token
   if (!isPublicPath && !token) {
@@ -17,9 +20,9 @@ export function proxy(request: NextRequest) {
   }
 
   // Redirect to dashboard if accessing auth pages with token
-  // if ((path === "/login" || path === "/register") && token) {
-  //   return NextResponse.redirect(new URL("/dashboard", request.url));
-  // }
+  if ((path === "/login" || path === "/register") && token) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
   return NextResponse.next();
 }
