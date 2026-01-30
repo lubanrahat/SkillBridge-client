@@ -71,6 +71,26 @@ export function Header() {
     }
   }
 
+  const dropdownMenuItem = {
+    name: "Dashboard",
+    link: "/dashboard",
+  };
+
+  if(user) {
+    switch(user.role) {
+      case "STUDENT":
+        dropdownMenuItem.link = "/dashboard";
+        break;
+      case "TUTOR":
+        dropdownMenuItem.link = "/tutor/dashboard";
+        
+        break;
+      case "ADMIN":
+        dropdownMenuItem.link = "/admin";
+        break;
+    }
+  }
+
   const handleLogout = () => {
     authService.logout();
     setUser(null);
@@ -100,7 +120,7 @@ export function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-32">
                       <DropdownMenuGroup>
-                        <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => window.location.href = dropdownMenuItem.link} className="cursor-pointer">{dropdownMenuItem.name}</DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
@@ -158,6 +178,64 @@ export function Header() {
             items={navItems}
             className="flex flex-col space-x-0 space-y-4 relative w-full items-start"
           />
+          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
+            {user ? (
+              <>
+                <div className="flex items-center flex-col gap-4"  >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="rounded-full cursor-pointer"
+                      >
+                        <Avatar>
+                          <AvatarFallback className="font-bold text-primary">{user.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      </Button> 
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-32">
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem onClick={() => window.location.href = dropdownMenuItem.link} className="cursor-pointer">{dropdownMenuItem.name}</DropdownMenuItem>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem onClick={handleLogout} variant="destructive" className="cursor-pointer">
+                          Log out
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <NavbarButton
+                    className="dark:bg-primary dark:text-white"
+                    href="/contact"
+                  >
+                    Get Started
+                  </NavbarButton>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex gap-3 flex-col">
+                  <NavbarButton
+                    className="dark:bg-primary dark:text-white"
+                    href="/login"
+                  >
+                    Login
+                  </NavbarButton>
+                  <NavbarButton
+                    className="dark:bg-primary dark:text-white"
+                    href="/register"
+                  >
+                    Sign Up
+                  </NavbarButton>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
         </MobileNavMenu>
       </MobileNav>
     </Navbar>

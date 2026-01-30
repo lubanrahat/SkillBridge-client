@@ -5,6 +5,7 @@ import type { Review, TutorProfile } from "@/types/api";
 import { Header } from "@/components/layout/navbar";
 import { BookingForm } from "@/components/tutors/booking-form";
 import { env } from "@/lib/env";
+import Footer from "@/components/layout/footer";
 
 async function getTutor(id: string) {
   try {
@@ -251,6 +252,7 @@ export default async function TutorProfilePage({
           </div>
         </div>
       </main>
+      <Footer/>
     </div>
   );
 }

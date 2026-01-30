@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Filter, X } from "lucide-react";
 import type { TutorProfile, Category } from "@/types/api";
 import { tutorService } from "@/lib/services/tutor.service";
 import { categoryService } from "@/lib/services/category.service";
@@ -9,6 +9,9 @@ import { Header } from "@/components/layout/navbar";
 import { TutorFilters } from "@/components/tutors/tutor-filters";
 import { TutorCard } from "@/components/tutors/tutor-card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import Footer from "@/components/layout/footer";
 
 export default function TutorsPage() {
   const [tutors, setTutors] = useState<TutorProfile[]>([]);
@@ -16,6 +19,7 @@ export default function TutorsPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     search: "",
     categoryId: "",
@@ -50,6 +54,7 @@ export default function TutorsPage() {
         if (!cancelled) {
           setTutors([]);
           setTotalPages(1);
+          toast.error("Failed to load tutors");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -67,6 +72,7 @@ export default function TutorsPage() {
       setCategories(data);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
+      toast.error("Failed to load categories");
     }
   };
 
@@ -88,22 +94,49 @@ export default function TutorsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
       <Header />
 
-      <main className="flex-1 pt-32 pb-12 bg-gray-50">
-        <div className="container mx-auto">
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold mb-2">Find Your Perfect Tutor</h1>
-            <p className="text-gray-600">
-              Browse through {tutors.length} expert tutors and start learning
-              today
+      {/* Hero Section */}
+      <section className="relative pt-24 pb-16 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 overflow-hidden">
+        <div className="container mx-auto px-4 text-center text-white relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Find Your Perfect Tutor
+            </h1>
+
+            <p className="text-lg md:text-xl text-blue-100 max-w-xl mx-auto">
+              Browse {tutors.length} expert tutors and start learning today
             </p>
+          </motion.div>
+        </div>
+
+        {/* subtle gradient fade */}
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/20 to-transparent"></div>
+      </section>
+
+
+
+      <main className="flex-1 -mt-8 pb-12 mt-10">
+        <div className="container mx-auto px-4">
+          {/* Mobile Filter Button */}
+          <div className="lg:hidden mb-6">
+            <Button
+              onClick={() => setShowFilters(!showFilters)}
+              className="w-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </Button>
           </div>
 
           <div className="grid lg:grid-cols-4 gap-8">
             {/* Filters Sidebar */}
-            <aside className="lg:col-span-1">
+            <aside className={`lg:col-span-1 ${showFilters ? "block" : "hidden lg:block"}`}>
               <TutorFilters
                 onSearch={handleSearch}
                 onCategoryChange={handleCategoryChange}
@@ -119,17 +152,24 @@ export default function TutorsPage() {
                   <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                 </div>
               ) : tutors.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-gray-500 text-lg">
-                    No tutors found matching your criteria.
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100"
+                >
+                  <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-violet-100 flex items-center justify-center">
+                    <Filter className="h-12 w-12 text-blue-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    No tutors found
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Try adjusting your filters to see more results
                   </p>
-                  <p className="text-gray-400 mt-2">
-                    Try adjusting your filters
-                  </p>
-                </div>
+                </motion.div>
               ) : (
                 <>
-                  <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {pagedTutors.map((tutor) => (
                       <TutorCard key={tutor.id} tutor={tutor} />
                     ))}
@@ -137,21 +177,36 @@ export default function TutorsPage() {
 
                   {/* Pagination */}
                   {totalPages > 1 && (
-                    <div className="flex justify-center gap-2 mt-8">
+                    <div className="flex justify-center items-center gap-3 mt-12">
                       <Button
                         variant="outline"
                         onClick={() => setPage(page - 1)}
                         disabled={page === 1}
+                        className="border-gray-200 hover:bg-gray-50"
                       >
                         Previous
                       </Button>
-                      <div className="flex items-center px-4">
-                        Page {page} of {totalPages}
+                      <div className="flex items-center gap-2">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                          <Button
+                            key={p}
+                            variant={p === page ? "default" : "outline"}
+                            onClick={() => setPage(p)}
+                            className={
+                              p === page
+                                ? "bg-gradient-to-r from-blue-600 to-violet-600"
+                                : "border-gray-200 hover:bg-gray-50"
+                            }
+                          >
+                            {p}
+                          </Button>
+                        ))}
                       </div>
                       <Button
                         variant="outline"
                         onClick={() => setPage(page + 1)}
                         disabled={page === totalPages}
+                        className="border-gray-200 hover:bg-gray-50"
                       >
                         Next
                       </Button>
@@ -163,6 +218,7 @@ export default function TutorsPage() {
           </div>
         </div>
       </main>
+      <Footer/>
     </div>
   );
 }

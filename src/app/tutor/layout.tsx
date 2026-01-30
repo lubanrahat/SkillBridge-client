@@ -25,10 +25,10 @@ export default function TutorLayout({
 
   return (
     <div className="min-h-screen flex">
-      <aside className="w-64 flex-shrink-0">
-        <Sidebar role="TUTOR" />
-      </aside>
-      <main className="flex-1 bg-gray-50 p-8 overflow-auto">{children}</main>
+      <Sidebar role="TUTOR" />
+      <main className="flex-1 bg-gray-50 p-4 md:p-8 overflow-auto lg:ml-0">
+        {children}
+      </main>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { Calendar, DollarSign, Star, Loader2 } from "lucide-react";
 import type { Booking } from "@/types/api";
 import { bookingService } from "@/lib/services/booking.service";
 import { StatCard } from "@/components/dashboard/stat-card";
+import { toast } from "sonner";
 
 export default function TutorDashboardPage() {
   const { user } = useAuth("TUTOR");
@@ -23,6 +24,7 @@ export default function TutorDashboardPage() {
       setBookings(data);
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
+      toast.error("Failed to load bookings");
     } finally {
       setLoading(false);
     }
@@ -95,13 +97,12 @@ export default function TutorDashboardPage() {
                         {new Date(booking.startTime).toLocaleString()}
                       </p>
                       <span
-                        className={`inline-block mt-1 px-2 py-1 rounded-full text-xs ${
-                          booking.status === "CONFIRMED"
+                        className={`inline-block mt-1 px-2 py-1 rounded-full text-xs ${booking.status === "CONFIRMED"
                             ? "bg-green-100 text-green-700"
                             : booking.status === "COMPLETED"
                               ? "bg-blue-100 text-blue-700"
                               : "bg-yellow-100 text-yellow-700"
-                        }`}
+                          }`}
                       >
                         {booking.status}
                       </span>

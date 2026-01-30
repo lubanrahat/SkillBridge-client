@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import api from "@/lib/api";
+import { authService } from "@/lib/services";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -47,6 +48,7 @@ export default function ProfilePage() {
     try {
       await api.patch("/auth/me", data);
       toast.success("Profile updated successfully!");
+      authService.logout();
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Failed to update profile";
