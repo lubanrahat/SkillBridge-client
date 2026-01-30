@@ -9,12 +9,16 @@ import type {
 
 export const authService = {
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>("/auth/register", data);
+    const response = await api.post<AuthResponse>("/auth/register", data, {
+      skipAutoRedirect: true,
+    });
 
     return response.data!;
   },
   async login(data: LoginRequest): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>("/auth/login", data);
+    const response = await api.post<AuthResponse>("/auth/login", data, {
+      skipAutoRedirect: true,
+    });
 
     if (response.data && response.data.token) {
       localStorage.setItem("token", response.data.token);

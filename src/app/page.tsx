@@ -228,7 +228,7 @@ export default function Home() {
               Find the perfect area to upgrade your skills.
             </p>
             <Link
-              href="/categories"
+              href="/"
               className="text-blue-600 hover:text-blue-700 font-medium flex items-center group"
             >
               View All Categories{" "}
@@ -266,7 +266,7 @@ export default function Home() {
               },
             ].map((cat, i) => (
               <Link
-                href={`/tutors?category=${cat.label}`}
+                href="/"
                 key={i}
                 className="group"
               >

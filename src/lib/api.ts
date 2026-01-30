@@ -13,6 +13,7 @@ export interface ApiResponse<T = unknown> {
 
 export interface RequestConfig extends RequestInit {
   params?: Record<string, string | number | boolean>;
+  skipAutoRedirect?: boolean;
 }
 
 class ApiClient {
@@ -44,7 +45,10 @@ class ApiClient {
     return url.toString();
   }
 
-  private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  private async handleResponse<T>(
+    response: Response,
+    config?: RequestConfig,
+  ): Promise<ApiResponse<T>> {
     let data: unknown;
 
     try {
@@ -54,7 +58,7 @@ class ApiClient {
     }
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !config?.skipAutoRedirect) {
         if (typeof window !== "undefined") {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
@@ -94,7 +98,7 @@ class ApiClient {
       ...config,
     });
 
-    return this.handleResponse<T>(response);
+    return this.handleResponse<T>(response, config);
   }
 
   async post<T>(
@@ -117,7 +121,7 @@ class ApiClient {
       ...config,
     });
 
-    return this.handleResponse<T>(response);
+    return this.handleResponse<T>(response, config);
   }
 
   async put<T>(
@@ -140,7 +144,7 @@ class ApiClient {
       ...config,
     });
 
-    return this.handleResponse<T>(response);
+    return this.handleResponse<T>(response, config);
   }
 
   async patch<T>(
@@ -163,7 +167,7 @@ class ApiClient {
       ...config,
     });
 
-    return this.handleResponse<T>(response);
+    return this.handleResponse<T>(response, config);
   }
 
   async delete<T>(
@@ -184,7 +188,7 @@ class ApiClient {
       ...config,
     });
 
-    return this.handleResponse<T>(response);
+    return this.handleResponse<T>(response, config);
   }
 }
 
