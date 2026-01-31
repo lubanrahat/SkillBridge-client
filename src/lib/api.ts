@@ -1,4 +1,6 @@
-const API_URL = process.env.BACKEND_URL || "http://localhost:8080/api/v1";
+import { env } from "./env";
+
+const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export interface ApiResponse<T = unknown> {
   success: boolean;

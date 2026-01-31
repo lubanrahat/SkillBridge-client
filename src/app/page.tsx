@@ -30,6 +30,7 @@ export default function Home() {
     const fetchTutors = async () => {
       try {
         const tutors = await tutorService.getAllTutors();
+        tutors.sort((a, b) => b.averageRating - a.averageRating);
         setFeaturedTutors(tutors.slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch featured tutors", error);
@@ -349,7 +350,7 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full border-blue-200 text-blue-100 hover:bg-blue-800 hover:text-white border w-full sm:w-auto cursor-pointer"
+                className="rounded-full border-blue-200 text-blue-500 hover:bg-blue-800 hover:text-white border w-full sm:w-auto cursor-pointer"
               >
                 Become a Tutor
               </Button>

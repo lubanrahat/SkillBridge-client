@@ -9,7 +9,7 @@ import Footer from "@/components/layout/footer";
 
 async function getTutor(id: string) {
   try {
-    const API_URL = env.BACKEND_URL || "http://localhost:8080/api/v1";
+    const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
     const response = await fetch(`${API_URL}/tutors/${id}`, {
       cache: "no-store",
     });
@@ -28,7 +28,7 @@ async function getTutor(id: string) {
 
 async function getTutorReviews(profileId: string, userId: string) {
   try {
-    const API_URL = env.BACKEND_URL || "http://localhost:8080/api/v1";
+    const API_URL = env.NEXT_PUBLIC_BACKEND_URL || "https://backend-mu-rosy-28.vercel.app/api/v1";
 
     const fetchReviews = async (id: string) => {
       const response = await fetch(`${API_URL}/reviews/tutor/${id}`, {
@@ -138,7 +138,7 @@ export default async function TutorProfilePage({
                     <h2 className="text-2xl font-bold">Availability</h2>
                   </div>
                   {!tutor.availability ||
-                  Object.keys(tutor.availability).length === 0 ? (
+                    Object.keys(tutor.availability).length === 0 ? (
                     <p className="text-gray-500 text-center py-8">
                       No availability set yet
                     </p>
@@ -159,11 +159,10 @@ export default async function TutorProfilePage({
                         return (
                           <div
                             key={day}
-                            className={`p-4 rounded-lg border-2 ${
-                              hasSlots
-                                ? "border-blue-200 bg-blue-50"
-                                : "border-gray-200 bg-gray-50"
-                            }`}
+                            className={`p-4 rounded-lg border-2 ${hasSlots
+                              ? "border-blue-200 bg-blue-50"
+                              : "border-gray-200 bg-gray-50"
+                              }`}
                           >
                             <h3 className="font-semibold text-sm uppercase tracking-wide mb-2 text-gray-700">
                               {day.charAt(0).toUpperCase() + day.slice(1)}
@@ -272,11 +271,10 @@ export default async function TutorProfilePage({
                                   {[...Array(5)].map((_, i) => (
                                     <Star
                                       key={i}
-                                      className={`h-4 w-4 ${
-                                        i < review.rating
-                                          ? "fill-yellow-400 text-yellow-400"
-                                          : "text-gray-300"
-                                      }`}
+                                      className={`h-4 w-4 ${i < review.rating
+                                        ? "fill-yellow-400 text-yellow-400"
+                                        : "text-gray-300"
+                                        }`}
                                     />
                                   ))}
                                 </div>

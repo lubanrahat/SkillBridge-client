@@ -48,13 +48,17 @@ export default function LoginPage() {
 
       // Redirect based on user role
       const user = response.user;
-      if (user.role === "ADMIN") {
-        router.push("/admin");
-      } else if (user.role === "TUTOR") {
-        router.push("/tutor/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
+
+      setTimeout(() => {
+        let targetUrl = "/dashboard";
+        if (user?.role === "ADMIN") {
+          targetUrl = "/admin";
+        } else if (user?.role === "TUTOR") {
+          targetUrl = "/tutor/dashboard";
+        }
+
+        window.location.href = targetUrl;
+      }, 500);
     } catch (error: unknown) {
       const message =
         error instanceof Error
