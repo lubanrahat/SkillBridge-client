@@ -28,7 +28,7 @@ async function getTutor(id: string) {
 
 async function getTutorReviews(profileId: string, userId: string) {
   try {
-    const API_URL = env.NEXT_PUBLIC_BACKEND_URL || "https://backend-mu-rosy-28.vercel.app/api/v1";
+    const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
     const fetchReviews = async (id: string) => {
       const response = await fetch(`${API_URL}/reviews/tutor/${id}`, {
