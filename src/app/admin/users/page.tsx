@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
 
   const handleStatusUpdate = async (
     userId: string,
-    status: "ACTIVE" | "BANNED",
+    status: "ACTIVE" | "BAN",
   ) => {
     setUpdatingId(userId);
     try {
@@ -145,20 +145,22 @@ export default function AdminUsersPage() {
                           <>
                             <Button
                               variant="outline"
+                              className=" cursor-pointer"
                               size="sm"
                               disabled={updatingId === user.id}
                               onClick={() =>
                                 handleStatusUpdate(user.id, "ACTIVE")
                               }
                             >
-                              Activate
+                              Unban
                             </Button>
                             <Button
                               variant="destructive"
+                               className=" cursor-pointer"
                               size="sm"
                               disabled={updatingId === user.id}
                               onClick={() =>
-                                handleStatusUpdate(user.id, "BANNED")
+                                handleStatusUpdate(user.id, "BAN")
                               }
                             >
                               Ban

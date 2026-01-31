@@ -103,7 +103,7 @@ export default function AdminCategoriesPage() {
               />
             </div>
             <Button
-              className="w-full bg-gradient-to-r from-blue-600 to-violet-600"
+              className="w-full bg-gradient-to-r from-blue-600 to-violet-600 cursor-pointer"
               onClick={handleCreate}
               disabled={savingId === "new"}
             >
@@ -151,9 +151,10 @@ export default function AdminCategoriesPage() {
                       )}
                     </div>
                     <Button
+
                       variant="outline"
                       size="sm"
-                      className="text-red-600 hover:text-red-700"
+                      className="text-red-600 hover:text-red-700 cursor-pointer"
                       disabled={savingId === category.id}
                       onClick={() => handleDelete(category.id)}
                     >

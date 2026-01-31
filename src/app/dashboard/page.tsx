@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-// import { bookingService } from "@/lib/services";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -138,7 +137,7 @@ export default function StudentDashboardPage() {
                     </div>
                   </div>
                   <Link href={`/dashboard/bookings`}>
-                    <Button variant="ghost" size="sm">
+                    <Button className=" cursor-pointer" variant="ghost" size="sm">
                       View Details
                     </Button>
                   </Link>
@@ -157,12 +156,12 @@ export default function StudentDashboardPage() {
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4">
             <Link href="/tutors">
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-violet-600">
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-violet-600 cursor-pointer">
                 Find a Tutor
               </Button>
             </Link>
             <Link href="/dashboard/bookings">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full cursor-pointer">
                 View My Bookings
               </Button>
             </Link>
