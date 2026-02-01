@@ -6,6 +6,7 @@ import type {
   AuthResponse,
   User,
 } from "@/types/api";
+import { removeAuthToken, setAuthToken } from "@/utils/auth";
 
 export const authService = {
   async register(data: RegisterRequest): Promise<AuthResponse> {
@@ -17,6 +18,7 @@ export const authService = {
 
     return (responseData as AuthResponse) || response.data!;
   },
+
   async login(data: LoginRequest): Promise<AuthResponse> {
     const response = await api.post<AuthResponse>("/auth/login", data, {
       skipAutoRedirect: true,
@@ -28,17 +30,10 @@ export const authService = {
     if (responseData && responseData.user) {
       if (responseData.token) {
         localStorage.setItem("token", responseData.token);
+        setAuthToken(responseData.token);
       }
       localStorage.setItem("user", JSON.stringify(responseData.user));
       return responseData as AuthResponse;
-    }
-
-    if (response.data && response.data.user) {
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      }
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      return response.data;
     }
 
     throw new Error("Invalid server response");
@@ -51,9 +46,10 @@ export const authService = {
 
   async logout() {
     try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-      });
+      // await fetch("/api/auth/logout", {
+      //   method: "POST",
+      // });
+      removeAuthToken()
     } catch (error) {
       console.error("Logout failed", error);
     } finally {
