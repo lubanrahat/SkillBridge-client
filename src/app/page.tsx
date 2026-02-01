@@ -29,21 +29,12 @@ export default function Home() {
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/tutors/?limit=3`,
-          {
-            credentials: "include",
-          },
-        );
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch tutors");
-        }
-
-        const tutors = await res.json();
-        setFeaturedTutors(tutors.data);
+        const tutors = await tutorService.getAllTutors();
+        tutors.sort((a, b) => b.averageRating - a.averageRating);
+        setFeaturedTutors(tutors.slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch featured tutors", error);
+        toast.error("Failed to load featured tutors");
       } finally {
         setLoadingTutors(false);
       }
