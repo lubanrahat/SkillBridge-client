@@ -29,12 +29,21 @@ export default function Home() {
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        const tutors = await tutorService.getAllTutors();
-        tutors.sort((a, b) => b.averageRating - a.averageRating);
-        setFeaturedTutors(tutors.slice(0, 3));
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/tutors/?limit=3`,
+          {
+            credentials: "include",
+          },
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch tutors");
+        }
+
+        const tutors = await res.json();
+        setFeaturedTutors(tutors.data);
       } catch (error) {
         console.error("Failed to fetch featured tutors", error);
-        toast.error("Failed to load featured tutors");
       } finally {
         setLoadingTutors(false);
       }
@@ -266,11 +275,7 @@ export default function Home() {
                 bg: "bg-orange-100 dark:bg-orange-900/20",
               },
             ].map((cat, i) => (
-              <Link
-                href="/"
-                key={i}
-                className="group"
-              >
+              <Link href="/" key={i} className="group">
                 <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center space-y-4 h-full">
                   <div className={`p-4 rounded-full ${cat.bg}`}>
                     <cat.icon className={`w-8 h-8 ${cat.color}`} />
