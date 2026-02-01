@@ -20,24 +20,30 @@ export const authService = {
   async login(data: LoginRequest): Promise<AuthResponse> {
     const response = await api.post<AuthResponse>("/auth/login", data, {
       skipAutoRedirect: true,
+      credentials: "include",
     });
 
     const responseData = (response.data || response) as any;
 
-    if (responseData && responseData.token && responseData.user) {
-      localStorage.setItem("token", responseData.token);
+    if (responseData && responseData.user) {
+      if (responseData.token) {
+        localStorage.setItem("token", responseData.token);
+      }
       localStorage.setItem("user", JSON.stringify(responseData.user));
       return responseData as AuthResponse;
     }
 
-    if (response.data && response.data.token && response.data.user) {
-      localStorage.setItem("token", response.data.token);
+    if (response.data && response.data.user) {
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
       localStorage.setItem("user", JSON.stringify(response.data.user));
       return response.data;
     }
 
     throw new Error("Invalid server response");
   },
+
   async getProfile(): Promise<User> {
     const response = await api.get<User>("/auth/me");
     return response.data!;
@@ -72,6 +78,6 @@ export const authService = {
 
   isAuthenticated(): boolean {
     if (typeof window === "undefined") return false;
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem("token") || !!localStorage.getItem("user");
   },
 };
