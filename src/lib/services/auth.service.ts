@@ -46,9 +46,6 @@ export const authService = {
 
   async logout() {
     try {
-      // await fetch("/api/auth/logout", {
-      //   method: "POST",
-      // });
       removeAuthToken()
     } catch (error) {
       console.error("Logout failed", error);
