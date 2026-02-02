@@ -197,7 +197,7 @@ export function Header() {
 
                   <NavbarButton
                     className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white shadow-md hover:shadow-lg transition-all duration-300 dark:from-primary dark:to-primary/80"
-                    href="/contact"
+                    href="/tutors"
                   >
                     Get Started
                   </NavbarButton>
@@ -283,7 +283,7 @@ export function Header() {
 
                     <NavbarButton
                       className="w-full bg-gradient-to-r from-primary to-primary/80 text-white shadow-md"
-                      href="/contact"
+                      href="/tutors"
                     >
                       Get Started
                     </NavbarButton>
