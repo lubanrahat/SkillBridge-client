@@ -228,15 +228,6 @@ export default function Home() {
             <p className="max-w-[500px] text-gray-500 md:text-lg dark:text-gray-400">
               Find the perfect area to upgrade your skills.
             </p>
-            <Link
-              href="/"
-              className="text-blue-600 hover:text-blue-700 font-medium flex items-center group"
-            >
-              View All Categories{" "}
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </Link>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
