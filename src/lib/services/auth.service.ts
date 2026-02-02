@@ -30,7 +30,7 @@ export const authService = {
     if (responseData && responseData.user) {
       if (responseData.token) {
         localStorage.setItem("token", responseData.token);
-        // setAuthToken(responseData.token);
+        await setAuthToken(responseData.token);
       }
       localStorage.setItem("user", JSON.stringify(responseData.user));
       return responseData as AuthResponse;
@@ -46,7 +46,7 @@ export const authService = {
 
   async logout() {
     try {
-      removeAuthToken()
+      await removeAuthToken();
     } catch (error) {
       console.error("Logout failed", error);
     } finally {
