@@ -142,7 +142,7 @@ export function Header() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="relative h-10 w-10 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg group"
+                        className="relative h-10 w-10 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg group cursor-pointer"
                       >
                         <div className={`absolute inset-0 ${getRoleBadgeColor(user.role)} opacity-10 group-hover:opacity-20 transition-opacity`} />
                         <Avatar className="h-10 w-10">

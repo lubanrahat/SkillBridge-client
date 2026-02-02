@@ -31,12 +31,9 @@ export default function AdminBookingsPage() {
     try {
       const data = await adminService.getBookings({
         status: statusFilter === "ALL" ? undefined : statusFilter,
-        // For simplicity we only support filtering by status from backend;
-        // tutor/student filters are applied client-side by search.
       });
       setBookings(data);
     } catch (error) {
-      console.error("Failed to load bookings:", error);
       toast.error("Failed to load bookings");
     } finally {
       setLoading(false);

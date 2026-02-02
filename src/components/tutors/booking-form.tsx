@@ -126,9 +126,18 @@ export function BookingForm({
       toast.success("Booking created successfully!");
       router.push("/dashboard/bookings");
     } catch (error: unknown) {
+      console.error("Booking creation failed:", error);
+
       const message =
         error instanceof Error ? error.message : "Failed to create booking";
+
+      // Show user-friendly error message
       toast.error(message);
+
+      // Log additional context for debugging
+      if (error instanceof Error && error.message.includes("forbidden")) {
+        console.error("Permission error - check user role and backend authorization");
+      }
     } finally {
       setIsLoading(false);
     }

@@ -43,6 +43,11 @@ export const tutorService = {
     return response.data!;
   },
 
+  async getTutorProfile(): Promise<TutorProfile> {
+    const response = await api.get<TutorProfile>("/tutors/profile");
+    return response.data!;
+  },
+
   async searchTutors(query: string, subject?: string): Promise<TutorProfile[]> {
     const params: Record<string, string> = { search: query };
     if (subject) params.subject = subject;

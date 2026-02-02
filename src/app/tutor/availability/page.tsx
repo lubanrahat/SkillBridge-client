@@ -29,7 +29,7 @@ const DAYS = [
 
 
 function validateTimeFormat(slot: string): boolean {
-  
+
   const timeRangeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]-([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
   return timeRangeRegex.test(slot);
 }
@@ -86,7 +86,7 @@ export default function TutorAvailabilityPage() {
       setLoading(true);
       try {
         const profile = (await tutorService
-          .getTutorById("me")
+          .getTutorProfile()
           .catch(() => null)) as TutorProfile | null;
 
         if (
@@ -98,8 +98,10 @@ export default function TutorAvailabilityPage() {
         } else {
           setAvailability({});
         }
-      } catch (error) {
-        console.error("Failed to load availability:", error);
+      } catch (error: any) {
+        if (error.message && !error.message.includes("404")) {
+          toast.error("Failed to load profile. Please try refreshing.");
+        }
       } finally {
         setLoading(false);
       }

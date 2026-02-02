@@ -72,25 +72,36 @@ export default async function TutorProfilePage({
 
   const reviews = await getTutorReviews(tutor.id, tutor.userId);
 
+  const getUserInitials = (name: string): string => {
+    return name
+      ?.trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((w) => w[0]?.toUpperCase() || "")
+      .join("");
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1 pt-32 pb-12 bg-gray-50">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Tutor Header */}
               <Card>
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-violet-400 flex-shrink-0" />
-                    <div className="flex-1">
-                      <h1 className="text-3xl font-bold mb-2">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-blue-400 to-violet-400 flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold">
+                      {getUserInitials(tutor.user?.name || "")}
+                    </div>
+                    <div className="flex-1 text-center md:text-left w-full">
+                      <h1 className="text-2xl md:text-3xl font-bold mb-2">
                         {tutor.user?.name || "Anonymous Tutor"}
                       </h1>
-                      <div className="flex items-center gap-4 mb-4">
+                      <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 mb-4 justify-center md:justify-start">
                         <div className="flex items-center gap-1">
                           <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                           <span className="text-lg font-semibold">
@@ -105,7 +116,7 @@ export default async function TutorProfilePage({
                           <span>{tutor.user?.email}</span>
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                         {(tutor.subjects || []).map((subject: string) => (
                           <span
                             key={subject}
@@ -122,9 +133,9 @@ export default async function TutorProfilePage({
 
               {/* About Section */}
               <Card>
-                <CardContent className="p-8">
-                  <h2 className="text-2xl font-bold mb-4">About</h2>
-                  <p className="text-gray-600 leading-relaxed">
+                <CardContent className="p-6 md:p-8">
+                  <h2 className="text-xl md:text-2xl font-bold mb-4">About</h2>
+                  <p className="text-gray-600 leading-relaxed text-sm md:text-base">
                     {tutor.bio || "This tutor hasn't added a bio yet."}
                   </p>
                 </CardContent>
@@ -132,10 +143,10 @@ export default async function TutorProfilePage({
 
               {/* Availability Section */}
               <Card>
-                <CardContent className="p-8">
+                <CardContent className="p-6 md:p-8">
                   <div className="flex items-center gap-3 mb-6">
                     <Clock className="h-6 w-6 text-blue-600" />
-                    <h2 className="text-2xl font-bold">Availability</h2>
+                    <h2 className="text-xl md:text-2xl font-bold">Availability</h2>
                   </div>
                   {!tutor.availability ||
                     Object.keys(tutor.availability).length === 0 ? (
@@ -195,7 +206,7 @@ export default async function TutorProfilePage({
               </Card>
 
               {/* Stats */}
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4">
@@ -247,8 +258,8 @@ export default async function TutorProfilePage({
 
               {/* Reviews Section */}
               <Card>
-                <CardContent className="p-8">
-                  <h2 className="text-2xl font-bold mb-6">Reviews</h2>
+                <CardContent className="p-6 md:p-8">
+                  <h2 className="text-xl md:text-2xl font-bold mb-6">Reviews</h2>
                   {reviews.length === 0 ? (
                     <p className="text-gray-500 text-center py-8">
                       No reviews yet
