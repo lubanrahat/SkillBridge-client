@@ -30,7 +30,7 @@ export const authService = {
     if (responseData && responseData.user) {
       if (responseData.token) {
         localStorage.setItem("token", responseData.token);
-        setAuthToken(responseData.token);
+        // setAuthToken(responseData.token);
       }
       localStorage.setItem("user", JSON.stringify(responseData.user));
       return responseData as AuthResponse;
