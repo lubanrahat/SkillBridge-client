@@ -26,6 +26,7 @@ export interface User {
   name: string;
   email: string;
   role: Role;
+  status: "ACTIVE" | "BAN";
   createdAt: string;
   updatedAt: string;
   tutorProfile?: TutorProfile | null;

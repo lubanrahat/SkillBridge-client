@@ -60,6 +60,7 @@ export default function AdminUsersPage() {
     try {
       const res = await adminService.updateUserStatus(userId, status);
       toast.success(res.message);
+      window.location.reload();
     } catch (error) {
       console.error("Failed to update user:", error);
       toast.error("Failed to update user status");
@@ -143,28 +144,31 @@ export default function AdminUsersPage() {
                       <td className="px-4 py-3 space-x-2">
                         {user.role !== "ADMIN" && (
                           <>
-                            <Button
-                              variant="outline"
-                              className=" cursor-pointer"
-                              size="sm"
-                              disabled={updatingId === user.id}
-                              onClick={() =>
-                                handleStatusUpdate(user.id, "ACTIVE")
-                              }
-                            >
-                              Unban
-                            </Button>
-                            <Button
-                              variant="destructive"
-                               className=" cursor-pointer"
-                              size="sm"
-                              disabled={updatingId === user.id}
-                              onClick={() =>
-                                handleStatusUpdate(user.id, "BAN")
-                              }
-                            >
-                              Ban
-                            </Button>
+                            {user.status === "BAN" ? (
+                              <Button
+                                variant="outline"
+                                className=" cursor-pointer"
+                                size="sm"
+                                disabled={updatingId === user.id}
+                                onClick={() =>
+                                  handleStatusUpdate(user.id, "ACTIVE")
+                                }
+                              >
+                                Unban
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="destructive"
+                                className=" cursor-pointer"
+                                size="sm"
+                                disabled={updatingId === user.id}
+                                onClick={() =>
+                                  handleStatusUpdate(user.id, "BAN")
+                                }
+                              >
+                                Ban
+                              </Button>
+                            )}
                           </>
                         )}
                       </td>

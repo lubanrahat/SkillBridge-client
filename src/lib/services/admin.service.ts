@@ -3,7 +3,7 @@ import type { Booking, User } from "@/types/api";
 
 export interface AdminUserSummary extends Pick<
   User,
-  "id" | "name" | "email" | "role" | "createdAt"
+  "id" | "name" | "email" | "role" | "status" | "createdAt"
 > {
   tutorProfile?: {
     id: string;
