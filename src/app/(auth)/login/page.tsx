@@ -180,6 +180,31 @@ export default function LoginPage() {
                       <span className="text-xs text-muted-foreground">jannat.ara@example.com</span>
                     </div>
                   </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    className="cursor-pointer py-3"
+                    onClick={() => {
+                      setValue("email", "sabbir.rahman@gmail.com");
+                      setValue("password", "sabbir.rahman@gmail.com");
+                    }}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold">Tutor Profile</span>
+                      <span className="text-xs text-muted-foreground">sabbir.rahman@gmail.com</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer py-3"
+                    onClick={() => {
+                      setValue("email", "jnayeem.ahmed@gmail.com");
+                      setValue("password", "jnayeem.ahmed@gmail.com");
+                    }}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold">Student Profile</span>
+                      <span className="text-xs text-muted-foreground">jnayeem.ahmed@gmail.com</span>
+                    </div>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
