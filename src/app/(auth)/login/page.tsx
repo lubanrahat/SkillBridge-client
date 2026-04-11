@@ -196,13 +196,13 @@ export default function LoginPage() {
                   <DropdownMenuItem
                     className="cursor-pointer py-3"
                     onClick={() => {
-                      setValue("email", "jnayeem.ahmed@gmail.com");
-                      setValue("password", "jnayeem.ahmed@gmail.com");
+                      setValue("email", "arif.hossain@gmail.com");
+                      setValue("password", "arif.hossain@gmail.com");
                     }}
                   >
                     <div className="flex flex-col gap-1">
                       <span className="font-semibold">Student Profile</span>
-                      <span className="text-xs text-muted-foreground">jnayeem.ahmed@gmail.com</span>
+                      <span className="text-xs text-muted-foreground">arif.hossain@gmail.com</span>
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
