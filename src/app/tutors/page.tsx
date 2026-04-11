@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from "@/components/layout/footer";
+import { AiSearchInput } from "@/components/ui/AiSearchInput";
 
 export default function TutorsPage() {
   const [tutors, setTutors] = useState<TutorProfile[]>([]);
@@ -19,6 +20,7 @@ export default function TutorsPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalTutors, setTotalTutors] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     search: "",
@@ -36,7 +38,9 @@ export default function TutorsPage() {
     const run = async () => {
       setLoading(true);
       try {
-        const data = await tutorService.getAllTutors({
+        const response = await tutorService.getAllTutors({
+          page,
+          limit: 9,
           search: filters.search || undefined,
           categoryId:
             filters.categoryId && filters.categoryId !== "all"
@@ -46,13 +50,15 @@ export default function TutorsPage() {
           maxRate: filters.maxRate || undefined,
         });
         if (!cancelled) {
-          setTutors(data);
-          setTotalPages(Math.max(1, Math.ceil(data.length / 9)));
+          setTutors(response.data);
+          setTotalTutors(response.pagination.total);
+          setTotalPages(Math.max(1, response.pagination.totalPages));
         }
       } catch (error) {
         console.error("Failed to fetch tutors:", error);
         if (!cancelled) {
           setTutors([]);
+          setTotalTutors(0);
           setTotalPages(1);
           toast.error("Failed to load tutors");
         }
@@ -68,15 +74,13 @@ export default function TutorsPage() {
 
   const fetchCategories = async () => {
     try {
-      const data = await categoryService.getAllCategories();
-      setCategories(data);
+      const response = await categoryService.getAllCategories();
+      setCategories(response.data);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
       toast.error("Failed to load categories");
     }
   };
-
-  const pagedTutors = tutors.slice((page - 1) * 9, page * 9);
 
   const handleSearch = (query: string) => {
     setFilters({ ...filters, search: query });
@@ -94,7 +98,7 @@ export default function TutorsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white dark:from-background dark:to-background">
       <Header />
 
       {/* Hero Section */}
@@ -110,7 +114,7 @@ export default function TutorsPage() {
             </h1>
 
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-blue-100 max-w-xl mx-auto px-2 sm:px-4">
-              Browse {tutors.length} expert tutors and start learning today
+              Browse {totalTutors} expert tutors and start learning today
             </p>
           </motion.div>
         </div>
@@ -126,12 +130,22 @@ export default function TutorsPage() {
           <div className="lg:hidden mb-3 sm:mb-4 md:mb-6">
             <Button
               onClick={() => setShowFilters(!showFilters)}
-              className="w-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 h-10 sm:h-11 text-sm"
+              className="w-full bg-white dark:bg-neutral-900 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800 h-10 sm:h-11 text-sm"
             >
               <Filter className="h-4 w-4 mr-2" />
               {showFilters ? "Hide Filters" : "Show Filters"}
             </Button>
           </div>
+
+          <AiSearchInput onApplyFilters={(aiFilters) => {
+            setFilters({
+              ...filters,
+              search: aiFilters.subject || filters.search,
+              maxRate: aiFilters.maxPrice || filters.maxRate,
+              // If we need other mappings, we can add them here
+            });
+            setPage(1);
+          }} />
 
           <div className="grid lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {/* Filters Sidebar */}
@@ -154,22 +168,22 @@ export default function TutorsPage() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center py-10 sm:py-12 md:py-20 bg-white rounded-2xl shadow-sm border border-gray-100 mx-1 sm:mx-2 md:mx-0"
+                  className="text-center py-10 sm:py-12 md:py-20 bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-gray-100 dark:border-neutral-800 mx-1 sm:mx-2 md:mx-0"
                 >
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 md:mb-6 rounded-full bg-gradient-to-br from-blue-100 to-violet-100 flex items-center justify-center">
-                    <Filter className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-blue-600" />
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 md:mb-6 rounded-full bg-gradient-to-br from-blue-100 to-violet-100 dark:from-blue-900/30 dark:to-violet-900/30 flex items-center justify-center">
+                    <Filter className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 px-3 sm:px-4">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 px-3 sm:px-4">
                     No tutors found
                   </h3>
-                  <p className="text-xs sm:text-sm md:text-base text-gray-500 mb-4 sm:mb-6 px-3 sm:px-4">
+                  <p className="text-xs sm:text-sm md:text-base text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 px-3 sm:px-4">
                     Try adjusting your filters to see more results
                   </p>
                 </motion.div>
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
-                    {pagedTutors.map((tutor) => (
+                    {tutors.map((tutor) => (
                       <TutorCard key={tutor.id} tutor={tutor} />
                     ))}
                   </div>
@@ -181,7 +195,7 @@ export default function TutorsPage() {
                         variant="outline"
                         onClick={() => setPage(page - 1)}
                         disabled={page === 1}
-                        className="border-gray-200 hover:bg-gray-50 w-full sm:w-auto min-w-[100px]"
+                        className="border-gray-200 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800 dark:text-gray-300 w-full sm:w-auto min-w-[100px]"
                       >
                         Previous
                       </Button>
@@ -194,8 +208,8 @@ export default function TutorsPage() {
                             size="sm"
                             className={
                               p === page
-                                ? "bg-gradient-to-r from-blue-600 to-violet-600 min-w-[40px]"
-                                : "border-gray-200 hover:bg-gray-50 min-w-[40px]"
+                                ? "bg-gradient-to-r from-blue-600 to-violet-600 min-w-[40px] text-white border-0"
+                                : "border-gray-200 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800 dark:text-gray-300 min-w-[40px]"
                             }
                           >
                             {p}
@@ -206,7 +220,7 @@ export default function TutorsPage() {
                         variant="outline"
                         onClick={() => setPage(page + 1)}
                         disabled={page === totalPages}
-                        className="border-gray-200 hover:bg-gray-50 w-full sm:w-auto min-w-[100px]"
+                        className="border-gray-200 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800 dark:text-gray-300 w-full sm:w-auto min-w-[100px]"
                       >
                         Next
                       </Button>

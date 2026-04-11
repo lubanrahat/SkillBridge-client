@@ -212,25 +212,25 @@ export function BookingForm({
           </div>
 
           <div className="space-y-2">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Selected date:{" "}
-              <span className="font-medium">
+              <span className="font-medium text-foreground">
                 {selectedDate ? format(selectedDate, "PPP") : "—"}
               </span>
             </p>
           </div>
 
           {totalCost > 0 && (
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-xl border border-blue-100 dark:border-blue-900/50">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Duration:</span>
-                <span className="font-medium">
+                <span className="text-sm text-muted-foreground">Duration:</span>
+                <span className="font-medium text-foreground">
                   {calculateDuration()} hour(s)
                 </span>
               </div>
               <div className="flex justify-between items-center mt-2">
-                <span className="text-sm text-gray-600">Total Cost:</span>
-                <span className="text-2xl font-bold text-blue-600">
+                <span className="text-sm text-muted-foreground">Total Cost:</span>
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   ${totalCost}
                 </span>
               </div>

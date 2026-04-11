@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 import { Home, Calendar, User, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/lib/services";
+import { useSearchParams } from "next/navigation";
 
 interface SidebarProps {
-  role: "STUDENT" | "TUTOR" | "ADMIN";
+  role: "STUDENT" | "TUTOR" | "ADMIN" | "MODERATOR" | "ORGANIZATION";
 }
 
 const studentLinks = [
@@ -31,8 +32,19 @@ const adminLinks = [
   { href: "/admin/categories", label: "Categories", icon: Home },
 ];
 
+const moderatorLinks = [
+  { href: "/moderator", label: "Dashboard", icon: Home },
+];
+
+const organizationLinks = [
+  { href: "/organization", label: "Overview", icon: Home },
+  { href: "/organization?tab=tutors", label: "Team Management", icon: User },
+  { href: "/organization?tab=bookings", label: "Global Bookings", icon: Calendar },
+];
+
 export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
   const links =
@@ -40,7 +52,11 @@ export function Sidebar({ role }: SidebarProps) {
       ? studentLinks
       : role === "TUTOR"
         ? tutorLinks
-        : adminLinks;
+        : role === "MODERATOR"
+          ? moderatorLinks
+          : role === "ORGANIZATION"
+            ? organizationLinks
+            : adminLinks;
 
   const handleLogout = () => {
     authService.logout();
@@ -55,13 +71,13 @@ export function Sidebar({ role }: SidebarProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white border shadow-sm hover:bg-gray-50"
+        className="lg:hidden fixed top-20 left-4 z-50 p-2 rounded-lg bg-white dark:bg-neutral-900 border dark:border-neutral-800 shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
         aria-label="Toggle menu"
       >
         {isOpen ? (
-          <X className="h-6 w-6 text-gray-600" />
+          <X className="h-6 w-6 text-gray-600 dark:text-gray-300" />
         ) : (
-          <Menu className="h-6 w-6 text-gray-600" />
+          <Menu className="h-6 w-6 text-gray-600 dark:text-gray-300" />
         )}
       </button>
 
@@ -76,7 +92,7 @@ export function Sidebar({ role }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out flex flex-col h-full",
+          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-neutral-900 border-r dark:border-neutral-800 transform transition-transform duration-300 ease-in-out flex flex-col h-full",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -88,12 +104,16 @@ export function Sidebar({ role }: SidebarProps) {
           >
             SkillBridge
           </Link>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {role === "STUDENT"
               ? "Student"
               : role === "TUTOR"
                 ? "Tutor"
-                : "Admin"}{" "}
+                : role === "MODERATOR"
+                  ? "Safety & Support"
+                  : role === "ORGANIZATION"
+                    ? "Institute"
+                    : "Admin"}{" "}
             Dashboard
           </p>
         </div>
@@ -101,7 +121,10 @@ export function Sidebar({ role }: SidebarProps) {
         <nav className="flex-1 px-4">
           {links.map((link) => {
             const Icon = link.icon;
-            const isActive = pathname === link.href;
+            // Enhanced active status check for query params
+            const isActive = link.href.includes("?") 
+              ? `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}` === link.href
+              : pathname === link.href;
 
             return (
               <Link
@@ -109,23 +132,23 @@ export function Sidebar({ role }: SidebarProps) {
                 href={link.href}
                 onClick={closeSidebar}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors",
+                  "flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all duration-200",
                   isActive
-                    ? "bg-blue-50 text-blue-600 font-medium"
-                    : "text-gray-600 hover:bg-gray-50"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20 font-bold"
+                    : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-gray-900 dark:hover:text-white"
                 )}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-gray-400")} />
                 {link.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t mt-auto">
+        <div className="p-4 border-t dark:border-neutral-800 mt-auto">
           <Button
             variant="ghost"
-            className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50 cursor-pointer"
+            className="w-full justify-start text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 cursor-pointer"
             onClick={handleLogout}
           >
             <LogOut className="h-5 w-5 mr-3" />

@@ -80,10 +80,10 @@ export default function ProfilePage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="mb-8 text-center md:text-left">
-        <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent inline-block">
+        <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent inline-block">
           Profile Settings
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
           Manage your personal information and account details
         </p>
       </div>
@@ -94,22 +94,22 @@ export default function ProfilePage() {
           <Card className="overflow-hidden border-none shadow-lg">
             <div className="h-32 bg-gradient-to-br from-blue-600 to-violet-600 relative">
               <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
-                <div className="w-24 h-24 rounded-full border-4 border-white bg-white shadow-md flex items-center justify-center">
-                  <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-2xl font-bold text-slate-600">
+                <div className="w-24 h-24 rounded-full border-4 border-white dark:border-neutral-900 bg-white dark:bg-neutral-900 shadow-md flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-slate-100 dark:bg-neutral-800 flex items-center justify-center text-2xl font-bold text-slate-600 dark:text-slate-300">
                     {user?.name ? getInitials(user.name) : "U"}
                   </div>
                 </div>
               </div>
             </div>
             <CardContent className="pt-16 pb-8 text-center">
-              <h2 className="text-xl font-bold text-gray-900 mb-1">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                 {user?.name || "Student"}
               </h2>
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-4">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium mb-4">
                 {user?.role || "STUDENT"}
               </div>
-              <div className="text-sm text-gray-500 flex items-center justify-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
+              <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400" />
                 Active Account
               </div>
             </CardContent>
@@ -128,7 +128,7 @@ export default function ProfilePage() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-700">
+                  <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">
                     Full Name
                   </Label>
                   <div className="relative">
@@ -150,7 +150,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-700">
+                  <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
                     Email Address
                   </Label>
                   <div className="relative">
@@ -171,20 +171,20 @@ export default function ProfilePage() {
                   )}
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <div className="p-4 bg-gray-50 dark:bg-neutral-800/50 rounded-lg border border-gray-100 dark:border-neutral-800">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 bg-white rounded-md shadow-sm">
-                      <Shield className="h-4 w-4 text-violet-600" />
+                    <div className="p-2 bg-white dark:bg-neutral-900 rounded-md shadow-sm">
+                      <Shield className="h-4 w-4 text-violet-600 dark:text-violet-400" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         Role & Permissions
                       </h4>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Current account level
                       </p>
                     </div>
-                    <div className="ml-auto text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                    <div className="ml-auto text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                       {user?.role}
                     </div>
                   </div>

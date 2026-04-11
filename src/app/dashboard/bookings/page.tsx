@@ -22,6 +22,9 @@ import { reviewService } from "@/lib/services/review.service";
 export default function MyBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [activeTab, setActiveTab] = useState("all");
   const [reviewBooking, setReviewBooking] = useState<Booking | null>(null);
   const [reviewData, setReviewData] = useState<CreateReviewRequest>({
     tutorProfileId: "",
@@ -32,12 +35,18 @@ export default function MyBookingsPage() {
 
   useEffect(() => {
     fetchBookings();
-  }, []);
+  }, [page, activeTab]);
 
   const fetchBookings = async () => {
+    setLoading(true);
     try {
-      const data = await bookingService.getMyBookings();
-      setBookings(data);
+      const response = await bookingService.getMyBookings({
+        page,
+        limit: 9,
+        status: activeTab === "all" ? undefined : activeTab,
+      });
+      setBookings(response.data);
+      setTotalPages(response.pagination.totalPages);
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
       toast.error("Failed to load bookings");
@@ -105,20 +114,7 @@ export default function MyBookingsPage() {
     }
   };
 
-  const filterBookings = (status?: string) => {
-    if (status === "upcoming") {
-      return bookings.filter(
-        (b) => b.status === "CONFIRMED" || b.status === "PENDING",
-      );
-    }
-    if (status === "completed") {
-      return bookings.filter((b) => b.status === "COMPLETED");
-    }
-    if (status === "cancelled") {
-      return bookings.filter((b) => b.status === "CANCELLED");
-    }
-    return bookings;
-  };
+  const filterBookings = () => bookings;
 
   const renderBookingCard = (booking: Booking) => (
     <Card key={booking.id}>
@@ -234,59 +230,76 @@ export default function MyBookingsPage() {
         </p>
       </div>
 
-      <Tabs defaultValue="all">
+      <Tabs value={activeTab} onValueChange={(val) => {
+        setActiveTab(val);
+        setPage(1);
+      }}>
         <TabsList>
-          <TabsTrigger value="all">All ({bookings.length})</TabsTrigger>
-          <TabsTrigger value="upcoming">
-            Upcoming ({filterBookings("upcoming").length})
-          </TabsTrigger>
-          <TabsTrigger value="completed">
-            Completed ({filterBookings("completed").length})
-          </TabsTrigger>
-          <TabsTrigger value="cancelled">
-            Cancelled ({filterBookings("cancelled").length})
-          </TabsTrigger>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+          <TabsTrigger value="completed">Completed</TabsTrigger>
+          <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="space-y-4 mt-6">
+        <div className="space-y-4 mt-6">
           {bookings.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500">No bookings found</p>
             </div>
           ) : (
-            filterBookings().map(renderBookingCard)
-          )}
-        </TabsContent>
+            <>
+              <div className="space-y-4">
+                {bookings.map(renderBookingCard)}
+              </div>
 
-        <TabsContent value="upcoming" className="space-y-4 mt-6">
-          {filterBookings("upcoming").length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No upcoming bookings</p>
-            </div>
-          ) : (
-            filterBookings("upcoming").map(renderBookingCard)
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex flex-col items-center justify-center gap-4 border-t pt-8">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page === 1}
+                      className="w-24 border-gray-200 dark:border-neutral-800"
+                    >
+                      Previous
+                    </Button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                        <Button
+                          key={p}
+                          variant={p === page ? "default" : "outline"}
+                          size="sm"
+                          className={`w-9 h-9 p-0 ${
+                            p === page
+                              ? "bg-gradient-to-r from-blue-600 to-violet-600 border-0"
+                              : "border-gray-200 dark:border-neutral-800"
+                          }`}
+                          onClick={() => setPage(p)}
+                        >
+                          {p}
+                        </Button>
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={page === totalPages}
+                      className="w-24 border-gray-200 dark:border-neutral-800"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Page {page} of {totalPages}
+                  </p>
+                </div>
+              )}
+            </>
           )}
-        </TabsContent>
-
-        <TabsContent value="completed" className="space-y-4 mt-6">
-          {filterBookings("completed").length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No completed bookings</p>
-            </div>
-          ) : (
-            filterBookings("completed").map(renderBookingCard)
-          )}
-        </TabsContent>
-
-        <TabsContent value="cancelled" className="space-y-4 mt-6">
-          {filterBookings("cancelled").length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No cancelled bookings</p>
-            </div>
-          ) : (
-            filterBookings("cancelled").map(renderBookingCard)
-          )}
-        </TabsContent>
+        </div>
       </Tabs>
       <Dialog
         open={!!reviewBooking}

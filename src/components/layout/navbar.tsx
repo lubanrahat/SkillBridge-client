@@ -27,6 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "../ui/button";
 import { authService } from "@/lib/services";
 import { User, LogOut, LayoutDashboard, Sparkles } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 type UserType = {
   id: string;
@@ -69,6 +70,7 @@ export function Header() {
 
     if (storedUser) {
       try {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setUser(JSON.parse(storedUser) as UserType);
       } catch (err) {
         console.error("Failed to parse user from localStorage", err);
@@ -133,6 +135,7 @@ export function Header() {
         <NavbarLogo />
         <NavItems items={navItems} />
         <div className="flex items-center space-x-3">
+          <ThemeToggle />
           <div className="flex items-center gap-3">
             {user ? (
               <>
@@ -228,6 +231,7 @@ export function Header() {
         <MobileNavHeader>
           <NavbarLogo />
           <div className="flex items-center space-x-2">
+            <ThemeToggle />
             <MobileNavToggle
               isOpen={mobileMenuOpen}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

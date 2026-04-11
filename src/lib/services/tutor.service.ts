@@ -4,13 +4,18 @@ import type {
   CreateTutorProfileRequest,
   UpdateAvailabilityRequest,
   PaginationParams,
+  PaginatedResponse,
 } from "@/types/api";
 
 export const tutorService = {
-  async getAllTutors(params?: PaginationParams): Promise<TutorProfile[]> {
+  async getAllTutors(
+    params?: PaginationParams,
+  ): Promise<PaginatedResponse<TutorProfile>> {
     const queryParams: Record<string, string> = {};
 
     if (params) {
+      if (params.page) queryParams.page = params.page.toString();
+      if (params.limit) queryParams.limit = params.limit.toString();
       if (params.search) queryParams.search = params.search;
       if (params.categoryId) queryParams.categoryId = params.categoryId;
       if (params.minRate) queryParams.minRate = params.minRate.toString();
@@ -21,7 +26,15 @@ export const tutorService = {
       params: queryParams,
     });
 
-    return response.data || [];
+    return {
+      data: response.data || [],
+      pagination: response.meta?.pagination || {
+        page: 1,
+        limit: 9,
+        total: response.data?.length || 0,
+        totalPages: 1,
+      },
+    };
   },
 
   async getTutorById(id: string): Promise<TutorProfile> {

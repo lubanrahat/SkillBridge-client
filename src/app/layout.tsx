@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,9 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Skill Bridge",
-  description: "Skill Bridge",
+  title: "SkillBridge — Master Any Skill, Anytime, Anywhere",
+  description:
+    "Connect with verified tutors for personalized 1-on-1 lessons in coding, languages, music, and more. Join 10k+ students on SkillBridge today.",
 };
+
+import { AiChatWidget } from "@/components/ui/AiChatWidget";
 
 export default function RootLayout({
   children,
@@ -24,13 +28,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
-        <Toaster richColors />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+        >
+          {children}
+          <AiChatWidget />
+          <Toaster richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -11,6 +11,15 @@ export interface ApiResponse<T = unknown> {
     message: string;
     details?: unknown;
   };
+  meta?: {
+    timestamp?: string;
+    pagination?: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    };
+  };
 }
 
 export interface RequestConfig extends RequestInit {

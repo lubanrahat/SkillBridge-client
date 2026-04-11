@@ -71,8 +71,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 dark:from-background dark:via-neutral-950 dark:to-neutral-900 p-4">
+      <Card className="w-full max-w-md dark:bg-neutral-900 dark:border-neutral-800">
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Link
@@ -133,7 +133,7 @@ export default function LoginPage() {
                 "Sign In"
               )}
             </Button>
-            <p className="text-sm text-center text-gray-600">
+            <p className="text-sm text-center text-gray-600 dark:text-gray-400">
               Don&apos;t have an account?{" "}
               <Link
                 href="/register"

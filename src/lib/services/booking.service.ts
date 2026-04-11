@@ -1,6 +1,7 @@
 import api from "@/lib/api";
 import type {
   Booking,
+  PaginatedResponse,
   CreateBookingRequest,
   UpdateBookingStatusRequest,
 } from "@/types/api";
@@ -11,9 +12,21 @@ export const bookingService = {
     return response.data!;
   },
 
-  async getMyBookings(): Promise<Booking[]> {
-    const response = await api.get<Booking[]>("/bookings");
-    return response.data || [];
+  async getMyBookings(params?: {
+    page?: number;
+    limit?: number;
+    status?: string | "all" | "upcoming" | "completed" | "cancelled";
+  }): Promise<PaginatedResponse<Booking>> {
+    const response = await api.get<Booking[]>("/bookings", { params });
+    return {
+      data: response.data || [],
+      pagination: response.meta?.pagination || {
+        page: 1,
+        limit: 9,
+        total: response.data?.length || 0,
+        totalPages: 1,
+      },
+    };
   },
 
   async getBookingById(id: string): Promise<Booking> {

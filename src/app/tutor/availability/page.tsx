@@ -98,6 +98,7 @@ export default function TutorAvailabilityPage() {
         } else {
           setAvailability({});
         }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         if (error.message && !error.message.includes("404")) {
           toast.error("Failed to load profile. Please try refreshing.");
@@ -172,8 +173,8 @@ export default function TutorAvailabilityPage() {
   return (
     <div className="max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Availability</h1>
-        <p className="text-gray-600">
+        <h1 className="text-3xl font-bold mb-2 dark:text-gray-100">Availability</h1>
+        <p className="text-gray-600 dark:text-gray-400">
           Set your weekly time slots. Students can only book within these
           ranges.
         </p>
@@ -195,10 +196,10 @@ export default function TutorAvailabilityPage() {
             return (
               <div
                 key={key}
-                className="flex flex-col gap-2 rounded-lg border bg-white p-4 md:flex-row md:items-center"
+                className="flex flex-col gap-2 rounded-lg border dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 md:flex-row md:items-center"
               >
-                <div className="w-32 font-medium">{label}</div>
-                <div className="flex-1 space-y-2 text-sm text-gray-600">
+                <div className="w-32 font-medium dark:text-gray-200">{label}</div>
+                <div className="flex-1 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   {slots.length === 0 ? (
                     <p className="text-xs text-gray-400">
                       No slots added for this day.
@@ -210,7 +211,7 @@ export default function TutorAvailabilityPage() {
                           key={`${slot}-${idx}`}
                           type="button"
                           onClick={() => handleRemoveSlot(key, idx)}
-                          className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100"
+                          className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-3 py-1 text-xs font-medium text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50"
                         >
                           {slot}
                           <span className="ml-1 text-blue-500">×</span>

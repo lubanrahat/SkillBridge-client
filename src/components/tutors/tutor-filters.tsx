@@ -54,7 +54,7 @@ export function TutorFilters({
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm p-3 sm:p-4 md:p-5 lg:p-6 rounded-2xl shadow-lg border border-gray-100 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 lg:sticky lg:top-24">
+    <div className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm p-3 sm:p-4 md:p-5 lg:p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-neutral-800 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 lg:sticky lg:top-24">
       <div className="flex items-center justify-between mb-0.5 sm:mb-1 md:mb-2">
         <h2 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
           Filters
@@ -63,7 +63,7 @@ export function TutorFilters({
           variant="ghost"
           size="sm"
           onClick={handleReset}
-          className="text-gray-500 hover:text-gray-700 h-7 sm:h-8 text-xs sm:text-sm"
+          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 h-7 sm:h-8 text-xs sm:text-sm"
         >
           <X className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
           Reset
@@ -71,14 +71,14 @@ export function TutorFilters({
       </div>
 
       <div>
-        <h3 className="font-semibold mb-1.5 sm:mb-2 md:mb-3 text-xs sm:text-sm md:text-base text-gray-700">Search</h3>
+        <h3 className="font-semibold mb-1.5 sm:mb-2 md:mb-3 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200">Search</h3>
         <div className="flex gap-1.5 sm:gap-2">
           <Input
             placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 text-xs sm:text-sm h-9 sm:h-10"
+            className="border-gray-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-blue-500 text-xs sm:text-sm h-9 sm:h-10 dark:bg-neutral-800"
           />
           <Button
             onClick={handleSearch}
@@ -91,9 +91,9 @@ export function TutorFilters({
       </div>
 
       <div>
-        <h3 className="font-semibold mb-1.5 sm:mb-2 md:mb-3 text-xs sm:text-sm md:text-base text-gray-700">Category</h3>
+        <h3 className="font-semibold mb-1.5 sm:mb-2 md:mb-3 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200">Category</h3>
         <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 h-9 sm:h-10 text-xs sm:text-sm">
+          <SelectTrigger className="border-gray-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-blue-500 h-9 sm:h-10 text-xs sm:text-sm dark:bg-neutral-800">
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent>
@@ -108,7 +108,7 @@ export function TutorFilters({
       </div>
 
       <div>
-        <h3 className="font-semibold mb-1.5 sm:mb-2 md:mb-3 text-xs sm:text-sm md:text-base text-gray-700">
+        <h3 className="font-semibold mb-1.5 sm:mb-2 md:mb-3 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200">
           Price: <span className="text-blue-600 text-xs sm:text-sm md:text-base">${priceRange[0]}-${priceRange[1]}/hr</span>
         </h3>
         <Slider

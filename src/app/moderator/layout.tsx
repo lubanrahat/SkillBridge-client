@@ -1,16 +1,16 @@
 "use client";
 
-import { Sidebar } from "@/components/dashboard/sidebar";
 import { useAuth } from "@/hooks/useAuth";
+import { Sidebar } from "@/components/dashboard/sidebar";
 import { Loader2 } from "lucide-react";
 import { Header } from "@/components/layout/navbar";
 
-export default function TutorLayout({
+export default function ModeratorLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useAuth("TUTOR");
+  const { user, loading } = useAuth("MODERATOR");
 
   if (loading) {
     return (
@@ -30,7 +30,7 @@ export default function TutorLayout({
         <Header />
       </div>
       <div className="flex-1 flex overflow-hidden">
-        <Sidebar role="TUTOR" />
+        <Sidebar role="MODERATOR" />
         <main className="flex-1 bg-gray-50 dark:bg-background p-4 md:p-8 overflow-y-auto lg:ml-0">
           {children}
         </main>

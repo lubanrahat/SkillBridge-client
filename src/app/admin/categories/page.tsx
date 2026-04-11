@@ -15,12 +15,18 @@ export default function AdminCategoriesPage() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [newName, setNewName] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const loadCategories = async () => {
     setLoading(true);
     try {
-      const data = await categoryService.getAllCategories();
-      setCategories(data);
+      const response = await categoryService.getAllCategories({
+        page,
+        limit: 9,
+      });
+      setCategories(response.data);
+      setTotalPages(response.pagination.totalPages);
     } catch (error) {
       console.error("Failed to load categories:", error);
       toast.error("Failed to load categories");
@@ -31,7 +37,7 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => {
     void loadCategories();
-  }, []);
+  }, [page]);
 
   const handleCreate = async () => {
     if (!newName.trim()) {
@@ -74,8 +80,8 @@ export default function AdminCategoriesPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Category Management</h1>
-        <p className="text-gray-600">
+        <h1 className="text-3xl font-bold mb-2 dark:text-gray-100">Category Management</h1>
+        <p className="text-gray-600 dark:text-gray-400">
           Create, update, and remove tutoring categories.
         </p>
       </div>
@@ -132,7 +138,7 @@ export default function AdminCategoriesPage() {
                 <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
               </div>
             ) : categories.length === 0 ? (
-              <p className="text-center text-gray-500 py-12">
+              <p className="text-center text-gray-500 dark:text-gray-400 py-12">
                 No categories created yet.
               </p>
             ) : (
@@ -140,12 +146,12 @@ export default function AdminCategoriesPage() {
                 {categories.map((category) => (
                   <div
                     key={category.id}
-                    className="flex items-center justify-between rounded-lg border bg-white p-4"
+                    className="flex items-center justify-between rounded-lg border dark:border-neutral-800 bg-white dark:bg-neutral-900/50 p-4"
                   >
                     <div>
-                      <p className="font-medium">{category.name}</p>
+                      <p className="font-medium dark:text-gray-200">{category.name}</p>
                       {category.description && (
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                           {category.description}
                         </p>
                       )}
@@ -162,6 +168,47 @@ export default function AdminCategoriesPage() {
                     </Button>
                   </div>
                 ))}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="mt-8 flex items-center justify-center gap-2 border-t pt-6">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page === 1}
+                      className="border-gray-200 dark:border-neutral-800"
+                    >
+                      Previous
+                    </Button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                        <Button
+                          key={p}
+                          variant={p === page ? "default" : "outline"}
+                          size="sm"
+                          className={`w-9 h-9 p-0 ${
+                            p === page
+                              ? "bg-gradient-to-r from-blue-600 to-violet-600 border-0"
+                              : "border-gray-200 dark:border-neutral-800"
+                          }`}
+                          onClick={() => setPage(p)}
+                        >
+                          {p}
+                        </Button>
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={page === totalPages}
+                      className="border-gray-200 dark:border-neutral-800"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </CardContent>

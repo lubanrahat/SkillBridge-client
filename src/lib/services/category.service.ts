@@ -1,10 +1,21 @@
 import api from "@/lib/api";
-import type { Category } from "@/types/api";
+import type { Category, PaginatedResponse } from "@/types/api";
 
 export const categoryService = {
-  async getAllCategories(): Promise<Category[]> {
-    const response = await api.get<Category[]>("/categories");
-    return response.data || [];
+  async getAllCategories(params?: {
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedResponse<Category>> {
+    const response = await api.get<Category[]>("/categories", { params });
+    return {
+      data: response.data || [],
+      pagination: response.meta?.pagination || {
+        page: 1,
+        limit: 9,
+        total: response.data?.length || 0,
+        totalPages: 1,
+      },
+    };
   },
 
   async createCategory(data: Omit<Category, "id">): Promise<Category> {

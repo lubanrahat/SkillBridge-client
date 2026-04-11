@@ -20,8 +20,8 @@ export default function TutorDashboardPage() {
 
   const fetchBookings = async () => {
     try {
-      const data = await bookingService.getMyBookings();
-      setBookings(data);
+      const result = await bookingService.getMyBookings();
+      setBookings(result.data);
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
       toast.error("Failed to load bookings");
@@ -48,8 +48,8 @@ export default function TutorDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.name}!</h1>
-        <p className="text-gray-600">Here&apos;s your teaching overview</p>
+        <h1 className="text-3xl font-bold mb-2 dark:text-gray-100">Welcome back, {user?.name}!</h1>
+        <p className="text-gray-600 dark:text-gray-400">Here&apos;s your teaching overview</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -79,29 +79,29 @@ export default function TutorDashboardPage() {
         </CardHeader>
         <CardContent>
           {bookings.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">No sessions yet</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 py-8">No sessions yet</p>
           ) : (
             <div className="space-y-4">
               {bookings.slice(0, 5).map((booking) => (
                 <div
                   key={booking.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
+                  className="flex items-center justify-between p-4 border dark:border-neutral-800 rounded-lg"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-violet-400" />
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-violet-400 shrink-0" />
                     <div>
-                      <h3 className="font-semibold">
+                      <h3 className="font-semibold dark:text-gray-100">
                         {booking.student?.name || "Anonymous Student"}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {new Date(booking.startTime).toLocaleString()}
                       </p>
                       <span
                         className={`inline-block mt-1 px-2 py-1 rounded-full text-xs ${booking.status === "CONFIRMED"
-                            ? "bg-green-100 text-green-700"
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
                             : booking.status === "COMPLETED"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-yellow-100 text-yellow-700"
+                              ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                              : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
                           }`}
                       >
                         {booking.status}
@@ -109,7 +109,7 @@ export default function TutorDashboardPage() {
                     </div>
                   </div>
                   {booking.totalPrice && (
-                    <div className="text-lg font-bold text-blue-600">
+                    <div className="text-lg font-bold text-blue-600 dark:text-blue-400 shrink-0">
                       ${booking.totalPrice}
                     </div>
                   )}

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { User } from "@/types/api";
 import { authService } from "@/lib/services";
 
-export function useAuth(requiredRole?: "STUDENT" | "TUTOR" | "ADMIN") {
+export function useAuth(requiredRole?: "STUDENT" | "TUTOR" | "ADMIN" | "MODERATOR" | "ORGANIZATION") {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,6 +30,10 @@ export function useAuth(requiredRole?: "STUDENT" | "TUTOR" | "ADMIN") {
             router.push("/admin");
           } else if (currentUser.role === "TUTOR") {
             router.push("/tutor/dashboard");
+          } else if (currentUser.role === "MODERATOR") {
+            router.push("/moderator");
+          } else if (currentUser.role === "ORGANIZATION") {
+            router.push("/organization");
           } else {
             router.push("/dashboard");
           }

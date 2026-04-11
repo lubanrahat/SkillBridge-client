@@ -22,7 +22,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
       transition={{ duration: 0.3 }}
       whileHover={{ y: -4 }}
     >
-      <Card className="hover:shadow-2xl transition-all duration-300 border-gray-100 overflow-hidden group h-full">
+      <Card className="hover:shadow-2xl transition-all duration-300 border-gray-100 dark:border-neutral-800 dark:bg-neutral-900 overflow-hidden group h-full">
         <CardContent className="p-3 sm:p-4 md:p-5 lg:p-6">
           <div className="flex items-start gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3 md:mb-4">
             <div className="relative shrink-0">
@@ -47,15 +47,15 @@ export function TutorCard({ tutor }: TutorCardProps) {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-sm sm:text-base md:text-lg truncate text-gray-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-bold text-sm sm:text-base md:text-lg truncate text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition-colors">
                 {tutor.user?.name || "Anonymous Tutor"}
               </h3>
               <div className="flex items-center gap-0.5 sm:gap-1 mt-0.5 sm:mt-1">
                 <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 fill-yellow-400 text-yellow-400" />
-                <span className="text-xs sm:text-xs md:text-sm font-semibold text-gray-900">
+                <span className="text-xs sm:text-xs md:text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {tutor.averageRating?.toFixed(1) || "0.0"}
                 </span>
-                <span className="text-xs sm:text-xs md:text-sm text-gray-500">
+                <span className="text-xs sm:text-xs md:text-sm text-gray-500 dark:text-gray-400">
                   ({tutor.totalReviews || 0})
                 </span>
               </div>
@@ -63,7 +63,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
           </div>
 
           {tutor.bio && (
-            <p className="text-xs sm:text-xs md:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-3 md:mb-4 leading-relaxed">
+            <p className="text-xs sm:text-xs md:text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-2 sm:mb-3 md:mb-4 leading-relaxed">
               {tutor.bio}
             </p>
           )}
@@ -74,7 +74,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
                 <Badge
                   key={subject}
                   variant="secondary"
-                  className="rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 border-0 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5"
+                  className="rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border-0 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5"
                 >
                   {subject}
                 </Badge>
@@ -82,19 +82,19 @@ export function TutorCard({ tutor }: TutorCardProps) {
               {tutor.subjects && tutor.subjects.length > 3 && (
                 <Badge
                   variant="outline"
-                  className="rounded-full border-blue-200 text-blue-600 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5"
+                  className="rounded-full border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5"
                 >
                   +{tutor.subjects.length - 3}
                 </Badge>
               )}
             </div>
 
-            <div className="flex items-center justify-between pt-2 sm:pt-3 md:pt-4 border-t border-gray-100 gap-2 sm:gap-3">
+            <div className="flex items-center justify-between pt-2 sm:pt-3 md:pt-4 border-t border-gray-100 dark:border-neutral-800 gap-2 sm:gap-3">
               <div className="shrink-0">
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
                   ${tutor.hourlyRate}
                 </div>
-                <span className="text-[10px] sm:text-xs text-gray-500">per hour</span>
+                <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">per hour</span>
               </div>
               <Link href={`/tutors/${tutor.id}`} className="shrink-0">
                 <Button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer text-[11px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 h-8 sm:h-9 md:h-10">

@@ -3,6 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Loader2 } from "lucide-react";
+import { Header } from "@/components/layout/navbar";
 
 export default function StudentLayout({
   children,
@@ -24,11 +25,16 @@ export default function StudentLayout({
   }
 
   return (
-    <div className="min-h-screen flex">
-      <Sidebar role="STUDENT" />
-      <main className="flex-1 bg-gray-50 p-4 md:p-8 overflow-auto lg:ml-0">
-        {children}
-      </main>
+    <div className="h-[100dvh] flex flex-col overflow-hidden">
+      <div className="flex-none border-b dark:border-neutral-800">
+        <Header />
+      </div>
+      <div className="flex-1 flex overflow-hidden">
+        <Sidebar role="STUDENT" />
+        <main className="flex-1 bg-gray-50 dark:bg-background p-4 md:p-8 overflow-y-auto lg:ml-0">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

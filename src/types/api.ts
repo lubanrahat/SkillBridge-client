@@ -19,7 +19,7 @@ export interface AuthResponse {
   user: User;
 }
 
-export type Role = "STUDENT" | "TUTOR" | "ADMIN";
+export type Role = "STUDENT" | "TUTOR" | "ADMIN" | "MODERATOR" | "ORGANIZATION";
 
 export interface User {
   id: string;

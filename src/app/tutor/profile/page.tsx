@@ -22,6 +22,7 @@ import type { Category } from "@/types/api";
 import { categoryService } from "@/lib/services/category.service";
 import { authService } from "@/lib/services";
 import { tutorService } from "@/lib/services/tutor.service";
+import { BioAutoGenModal } from "@/components/ui/BioAutoGenModal";
 
 const tutorProfileSchema = z.object({
   bio: z.string().min(10, "Bio must be at least 10 characters"),
@@ -61,11 +62,11 @@ export default function TutorProfilePage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [cats, user] = await Promise.all([
+        const [catsResponse, user] = await Promise.all([
           categoryService.getAllCategories(),
           authService.getProfile(),
         ]);
-        setCategories(cats);
+        setCategories(catsResponse.data);
 
         if (user.tutorProfile) {
           reset({
@@ -142,7 +143,10 @@ export default function TutorProfilePage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="bio">Bio</Label>
+                <BioAutoGenModal onGenerate={(bio) => setValue("bio", bio, { shouldValidate: true })} />
+              </div>
               <Textarea
                 id="bio"
                 placeholder="Tell students about your experience and teaching style..."
