@@ -19,7 +19,15 @@ import {
 } from "@/components/ui/card";
 import { authService } from "@/lib/services";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronDown, UserCircle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -35,6 +43,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -116,6 +125,63 @@ export default function LoginPage() {
                   {errors.password.message}
                 </p>
               )}
+            </div>
+            <div className="pt-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full flex justify-between items-center border-dashed border-2 hover:bg-muted/50 transition-all duration-200"
+                  >
+                    <div className="flex items-center gap-2">
+                      <UserCircle className="h-4 w-4 text-primary" />
+                      <span className="font-medium">Demo User Login</span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[calc(100vw-2rem)] max-w-md" align="center">
+                  <DropdownMenuLabel>Select Demo Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer py-3"
+                    onClick={() => {
+                      setValue("email", "tanvir.rahman@example.com");
+                      setValue("password", "tanvir.rahman@example.com");
+                    }}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold">Admin Profile</span>
+                      <span className="text-xs text-muted-foreground">tanvir.rahman@example.com</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer py-3"
+                    onClick={() => {
+                      setValue("email", "lubanrahat.dev@gmail.com");
+                      setValue("password", "lubanrahat.dev@gmail.com");
+                    }}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold">Organizer Profile</span>
+                      <span className="text-xs text-muted-foreground">lubanrahat.dev@gmail.com</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer py-3"
+                    onClick={() => {
+                      setValue("email", "jannat.ara@example.com");
+                      setValue("password", "jannat.ara@example.com");
+                    }}
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold">Moderator Profile</span>
+                      <span className="text-xs text-muted-foreground">jannat.ara@example.com</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
